@@ -16,10 +16,7 @@ mongoose_1.default.connect(process.env.MONGO_URI || "your-mongo-uri", {})
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error(err));
 // GraphQL endpoint
-app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
-    schema: schema_1.default,
-    graphiql: true
-}));
+app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({ schema: schema_1.default, graphiql: true }));
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/graphql`);
 });

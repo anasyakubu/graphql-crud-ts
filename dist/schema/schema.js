@@ -5,73 +5,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
 const Post_1 = __importDefault(require("../models/Post"));
-// Post Type
+//************************ Post Type ************************//
 const PostType = new graphql_1.GraphQLObjectType({
     name: "Post",
     fields: () => ({
-        id: { type: graphql_1.GraphQLID },
-        title: { type: graphql_1.GraphQLString },
-        content: { type: graphql_1.GraphQLString }
+        id: { type: graphql_1.GraphQLID }, title: { type: graphql_1.GraphQLString }, content: { type: graphql_1.GraphQLString }
     })
 });
-// Root Query
+//************************ Root Query ************************//
 const RootQuery = new graphql_1.GraphQLObjectType({
     name: "RootQueryType",
     fields: {
-        posts: {
-            type: new graphql_1.GraphQLList(PostType),
-            resolve() {
-                return Post_1.default.find();
-            }
-        },
+        posts: { type: new graphql_1.GraphQLList(PostType), resolve() { return Post_1.default.find(); } },
         post: {
-            type: PostType,
-            args: { id: { type: graphql_1.GraphQLID } },
-            resolve(_, args) {
-                return Post_1.default.findById(args.id);
-            }
+            type: PostType, args: { id: { type: graphql_1.GraphQLID } },
+            resolve(_, args) { return Post_1.default.findById(args.id); }
         }
     }
 });
-// Mutations
+//************************ Mutations ************************//
 const Mutation = new graphql_1.GraphQLObjectType({
     name: "Mutation",
     fields: {
         addPost: {
             type: PostType,
-            args: {
-                title: { type: graphql_1.GraphQLString },
-                content: { type: graphql_1.GraphQLString }
-            },
+            args: { title: { type: graphql_1.GraphQLString }, content: { type: graphql_1.GraphQLString } },
             resolve(_, args) {
-                const post = new Post_1.default({
-                    title: args.title,
-                    content: args.content
-                });
+                const post = new Post_1.default({ title: args.title, content: args.content });
                 return post.save();
             }
         },
         updatePost: {
             type: PostType,
             args: {
-                id: { type: graphql_1.GraphQLID },
-                title: { type: graphql_1.GraphQLString },
-                content: { type: graphql_1.GraphQLString }
+                id: { type: graphql_1.GraphQLID }, title: { type: graphql_1.GraphQLString }, content: { type: graphql_1.GraphQLString }
             },
             resolve(_, args) {
                 return Post_1.default.findByIdAndUpdate(args.id, { title: args.title, content: args.content }, { new: true });
             }
         },
         deletePost: {
-            type: PostType,
-            args: { id: { type: graphql_1.GraphQLID } },
-            resolve(_, args) {
-                return Post_1.default.findByIdAndDelete(args.id);
-            }
+            type: PostType, args: { id: { type: graphql_1.GraphQLID } },
+            resolve(_, args) { return Post_1.default.findByIdAndDelete(args.id); }
         }
     }
 });
-exports.default = new graphql_1.GraphQLSchema({
-    query: RootQuery,
-    mutation: Mutation
-});
+exports.default = new graphql_1.GraphQLSchema({ query: RootQuery, mutation: Mutation });

@@ -1,8 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPost extends Document {
-  title: string;
-  content: string;
+  title: string; content: string;
 }
 
 const PostSchema: Schema = new Schema({
